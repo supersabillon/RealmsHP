@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="55%" r="60%">
+      <stop offset="0%" stop-color="#0a2540"/>
+      <stop offset="100%" stop-color="#020c1a"/>
+    </radialGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bgGlow)"/>
+
+  <!-- soft outer halo -->
+  <circle cx="256" cy="256" r="172" fill="none" stroke="#00aaff" stroke-opacity="0.35" stroke-width="14" filter="url(#blur)"/>
+
+  <!-- crisp ring -->
+  <circle cx="256" cy="256" r="172" fill="none" stroke="#00aaff" stroke-width="6"/>
+
+  <!-- inner diamond core (angular sci-fi) -->
+  <g filter="url(#blur)" opacity="0.7">
+    <polygon points="256,116 376,256 256,396 136,256" fill="#00aaff" fill-opacity="0.18"/>
+  </g>
+  <polygon points="256,116 376,256 256,396 136,256" fill="none" stroke="#00aaff" stroke-width="4"/>
+
+  <!-- inner core dot -->
+  <circle cx="256" cy="256" r="40" fill="#00aaff" opacity="0.18" filter="url(#blur)"/>
+  <circle cx="256" cy="256" r="22" fill="#e8f4ff"/>
+
+  <!-- tick accents on ring (4 cardinal) -->
+  <g stroke="#00aaff" stroke-width="6" stroke-linecap="round">
+    <line x1="256" y1="64"  x2="256" y2="92"/>
+    <line x1="256" y1="420" x2="256" y2="448"/>
+    <line x1="64"  y1="256" x2="92"  y2="256"/>
+    <line x1="420" y1="256" x2="448" y2="256"/>
+  </g>
+</svg>

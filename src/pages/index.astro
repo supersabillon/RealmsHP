@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PlayerPanel from '../components/PlayerPanel.astro';
+---
+
+<Layout>
+  <canvas id="stars"></canvas>
+
+  <div id="app">
+    <PlayerPanel index={2} label="COMMANDER BETA" />
+
+    <div id="seam">
+      <div id="seam-center" title="Hold to reset game">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2a10 10 0 1 0 10 10H20a8 8 0 1 1-8-8V2z"/>
+          <polygon points="12,2 16,6 12,10"/>
+        </svg>
+      </div>
+    </div>
+
+    <PlayerPanel index={1} label="COMMANDER ALPHA" />
+  </div>
+
+  <div id="reset-overlay">
+    <div class="reset-modal">
+      <h2>NEW GAME</h2>
+      <p>Hold to confirm fleet reset</p>
+      <div class="reset-progress-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="28"/>
+          <circle class="ring-fill" id="ring-fill" cx="32" cy="32" r="28"/>
+        </svg>
+        <div class="ring-text" id="ring-text">3</div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" id="modal-cancel">CANCEL</button>
+        <button class="btn-confirm" id="modal-confirm">RESET</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import '../scripts/game.ts';
+  </script>
+</Layout>
