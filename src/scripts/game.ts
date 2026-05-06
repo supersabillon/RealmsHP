@@ -226,7 +226,6 @@ const hpEls = [$('hp1'), $('hp2')];
 const dmgEls = [$('dmg1'), $('dmg2')];
 const healEls = [$('heal1'), $('heal2')];
 const pendingEls = [$('pending1'), $('pending2')];
-const logEls = [$('log1'), $('log2')];
 const attackBtns = [$<HTMLButtonElement>('attack1'), $<HTMLButtonElement>('attack2')];
 const healBtns = [$<HTMLButtonElement>('healBtn1'), $<HTMLButtonElement>('healBtn2')];
 const undoBtns = [$<HTMLButtonElement>('undo1'), $<HTMLButtonElement>('undo2')];
@@ -240,27 +239,12 @@ const logData: Pair<LogEntry[]> = [
 ];
 
 function addLog(player: 0 | 1, msg: string, type?: string) {
-  const el = document.createElement('div');
-  el.className = 'log-entry ' + (type || '');
-  el.textContent = msg;
-  logEls[player].prepend(el);
   logData[player].unshift({ msg, type, ts: Date.now() });
   if (logData[player].length > 20) logData[player].pop();
   try {
     localStorage.setItem('sr_log_' + player, JSON.stringify(logData[player]));
   } catch {
     /* ignore */
-  }
-}
-
-function restoreLog(player: 0 | 1) {
-  logEls[player].innerHTML = '';
-  const entries = logData[player].slice(0, 8);
-  for (const e of [...entries].reverse()) {
-    const el = document.createElement('div');
-    el.className = 'log-entry ' + (e.type || '');
-    el.textContent = e.msg;
-    logEls[player].prepend(el);
   }
 }
 
@@ -396,8 +380,6 @@ function undo(player: 0 | 1) {
   vBanners.forEach((v) => v.classList.remove('visible'));
 
   for (let p = 0; p < 2; p++) {
-    const first = logEls[p].firstChild;
-    if (first) logEls[p].removeChild(first);
     logData[p].shift();
     try {
       localStorage.setItem('sr_log_' + p, JSON.stringify(logData[p]));
@@ -451,8 +433,6 @@ function executeReset() {
   state = defaultState();
   logData[0] = [];
   logData[1] = [];
-  logEls[0].innerHTML = '';
-  logEls[1].innerHTML = '';
   winFlashes.forEach((w) => w.classList.remove('active'));
   vBanners.forEach((v) => v.classList.remove('visible'));
   try {
@@ -495,7 +475,7 @@ function wirePlayerEvents() {
     $(`attack${n}`).addEventListener('click', () => attack(i));
     $(`healBtn${n}`).addEventListener('click', () => heal(i));
     $(`undo${n}`).addEventListener('click', () => undo(i));
-    $(`log${n}`).addEventListener('click', () => openLogOverlay(i));
+    $(`logBtn${n}`).addEventListener('click', () => openLogOverlay(i));
     $(`logClose${n}`).addEventListener('click', () => closeLogOverlay(i));
   }
 }
@@ -530,6 +510,4 @@ wirePlayerEvents();
 wireResetEvents();
 document.addEventListener('dblclick', (e) => e.preventDefault());
 
-restoreLog(0);
-restoreLog(1);
 render();

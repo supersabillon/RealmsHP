@@ -87,7 +87,7 @@ html, body {
   padding: 12px 16px;
   gap: 8px;
   z-index: 1;
-  --btn-size: clamp(44px, 10vw, 60px);
+  --btn-size: clamp(48px, 11vw, 68px);
   --group-width: calc(3 * var(--btn-size) + 20px);
 }
 
@@ -229,11 +229,11 @@ html, body {
   position: relative;
   overflow: hidden;
   width: var(--group-width);
-  padding: clamp(8px, 1.5vw, 12px) 0;
+  padding: clamp(10px, 2vw, 16px) 0;
   border-radius: 6px;
   border: 1.5px solid var(--damage-orange);
   background: linear-gradient(135deg, rgba(255,102,51,0.18), rgba(255,50,0,0.08));
-  color: var(--damage-orange);
+  color: #ffd9c8;
   font-family: var(--font-display);
   font-size: clamp(13px, 2.5vw, 18px);
   font-weight: 700;
@@ -268,11 +268,11 @@ html, body {
   position: relative;
   overflow: hidden;
   width: var(--group-width);
-  padding: clamp(8px, 1.5vw, 12px) 0;
+  padding: clamp(10px, 2vw, 16px) 0;
   border-radius: 6px;
   border: 1.5px solid var(--heal-green);
   background: linear-gradient(135deg, rgba(0,255,170,0.12), rgba(0,200,120,0.06));
-  color: var(--heal-green);
+  color: #ccfff0;
   font-family: var(--font-display);
   font-size: clamp(13px, 2.5vw, 18px);
   font-weight: 700;
@@ -347,34 +347,7 @@ html, body {
   100% { transform: scale(1); }
 }
 
-/* ── COMBAT LOG ── */
-.log-area {
-  width: 100%;
-  height: clamp(48px, 8vh, 70px);
-  flex-shrink: 0;
-  overflow-y: auto;
-  scrollbar-width: none;
-  mask-image: linear-gradient(to top, transparent, black 30%);
-  cursor: pointer;
-  transition: background 0.15s;
-  border-radius: 6px;
-}
-.log-area:hover { background: rgba(0,170,255,0.05); }
-.log-area::-webkit-scrollbar { display: none; }
-.log-area:empty::after {
-  content: '';
-}
-.log-area:not(:empty)::before {
-  content: 'TAP FOR HISTORY';
-  display: block;
-  font-family: var(--font-ui);
-  font-size: clamp(8px, 1.1vw, 9px);
-  letter-spacing: 0.2em;
-  color: rgba(0,170,255,0.35);
-  text-align: center;
-  padding-bottom: 2px;
-}
-
+/* ── COMBAT LOG OVERLAY ── */
 .log-overlay {
   position: absolute;
   inset: 8px;
@@ -474,6 +447,13 @@ html, body {
 }
 
 .undo-corner {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+}
+
+.log-corner {
   position: absolute;
   top: 12px;
   right: 12px;

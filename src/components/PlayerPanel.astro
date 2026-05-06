@@ -41,13 +41,23 @@ const i = index;
     </svg>
   </button>
 
+  <button class="icon-btn log-corner" id={`logBtn${i}`} title="Show combat log" aria-label="Show combat log">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/>
+      <line x1="12" y1="5.5" x2="12" y2="7"/>
+      <line x1="12" y1="17" x2="12" y2="18.5"/>
+      <line x1="5.5" y1="12" x2="7" y2="12"/>
+      <line x1="17" y1="12" x2="18.5" y2="12"/>
+      <line x1="12" y1="12" x2="12" y2="9"/>
+      <line x1="12" y1="12" x2="14.5" y2="13"/>
+    </svg>
+  </button>
+
   <div class="action-row">
     <button class="attack-btn" id={`attack${i}`} disabled>⚡ ATTACK</button>
     <div class="controls-divider"></div>
     <button class="heal-btn" id={`healBtn${i}`} disabled>✦ HEAL</button>
   </div>
-
-  <div class="log-area" id={`log${i}`} role="button" tabindex="0" aria-label="Show full combat log"></div>
 
   <div class="log-overlay" id={`logOverlay${i}`}>
     <div class="log-overlay-header">
