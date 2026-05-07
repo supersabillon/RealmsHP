@@ -499,9 +499,6 @@ function wireResetEvents() {
   seamCenter.addEventListener('touchcancel', cancelResetHold);
   document.addEventListener('mouseup', cancelResetHold);
   document.addEventListener('touchend', cancelResetHold);
-
-  $('modal-cancel').addEventListener('click', cancelResetHold);
-  $('modal-confirm').addEventListener('click', executeReset);
 }
 
 // ── INIT ─────────────────────────────────────────────────────────────────────

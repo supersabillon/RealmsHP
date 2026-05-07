@@ -538,30 +538,6 @@ html, body {
   color: var(--glow-blue);
 }
 
-.modal-btns { display: flex; gap: 12px; justify-content: center; }
-.btn-cancel, .btn-confirm {
-  padding: 10px 28px;
-  border-radius: 6px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  cursor: pointer;
-  transition: background 0.15s, box-shadow 0.15s;
-}
-.btn-cancel {
-  border: 1.5px solid rgba(0,170,255,0.3);
-  background: transparent;
-  color: var(--text-mid);
-}
-.btn-cancel:hover { background: rgba(0,170,255,0.08); border-color: var(--glow-blue); }
-.btn-confirm {
-  border: 1.5px solid var(--glow-blue);
-  background: rgba(0,170,255,0.12);
-  color: var(--glow-blue);
-}
-.btn-confirm:hover { background: rgba(0,170,255,0.22); box-shadow: 0 0 16px rgba(0,170,255,0.3); }
-
 /* ── WIN FLASH ── */
 .win-flash {
   position: absolute; inset: 0;

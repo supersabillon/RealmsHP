@@ -24,17 +24,13 @@ import PlayerPanel from '../components/PlayerPanel.astro';
   <div id="reset-overlay">
     <div class="reset-modal">
       <h2>NEW GAME</h2>
-      <p>Hold to confirm fleet reset</p>
+      <p>Release to cancel</p>
       <div class="reset-progress-ring">
         <svg width="64" height="64" viewBox="0 0 64 64">
           <circle class="ring-bg" cx="32" cy="32" r="28"/>
           <circle class="ring-fill" id="ring-fill" cx="32" cy="32" r="28"/>
         </svg>
         <div class="ring-text" id="ring-text">3</div>
-      </div>
-      <div class="modal-btns">
-        <button class="btn-cancel" id="modal-cancel">CANCEL</button>
-        <button class="btn-confirm" id="modal-confirm">RESET</button>
       </div>
     </div>
   </div>
