@@ -1,9 +1,8 @@
 ---
 interface Props {
   index: 1 | 2;
-  label: string;
 }
-const { index, label } = Astro.props;
+const { index } = Astro.props;
 const i = index;
 ---
 <div class="player-panel" id={`player${i}`}>
@@ -13,8 +12,6 @@ const i = index;
     <div class="v-sub">Authority secured</div>
   </div>
 
-  <div class="player-label" id={`label${i}`}>{label}</div>
-
   <div class="health-wrap">
     <div class="health-number" id={`hp${i}`}>50</div>
     <div class="pending-badge" id={`pending${i}`}></div>
@@ -22,15 +19,15 @@ const i = index;
 
   <div class="controls-row">
     <div class="damage-controls">
-      <button class="dmg-btn minus" id={`minus${i}`} aria-label="Decrease damage">−</button>
+      <button class="dmg-btn minus" id={`minus${i}`} aria-label="Decrease damage"></button>
       <div class="dmg-display" id={`dmg${i}`}>0</div>
-      <button class="dmg-btn" id={`plus${i}`} aria-label="Increase damage">+</button>
+      <button class="dmg-btn plus" id={`plus${i}`} aria-label="Increase damage"></button>
     </div>
     <div class="controls-divider"></div>
     <div class="heal-controls">
-      <button class="dmg-btn heal-minus" id={`hminus${i}`} aria-label="Decrease heal">−</button>
+      <button class="dmg-btn heal-minus" id={`hminus${i}`} aria-label="Decrease heal"></button>
       <div class="heal-display" id={`heal${i}`}>0</div>
-      <button class="dmg-btn heal-plus" id={`hplus${i}`} aria-label="Increase heal">+</button>
+      <button class="dmg-btn heal-plus" id={`hplus${i}`} aria-label="Increase heal"></button>
     </div>
   </div>
 

@@ -87,7 +87,7 @@ html, body {
   padding: 12px 8px;
   gap: 8px;
   z-index: 1;
-  --btn-size: clamp(56px, 11vw, 76px);
+  --btn-size: clamp(64px, 12vw, 84px);
   --group-width: calc(3 * var(--btn-size) + 10px);
 }
 
@@ -101,16 +101,6 @@ html, body {
   pointer-events: none;
 }
 
-/* ── PLAYER LABEL ── */
-.player-label {
-  font-family: var(--font-display);
-  font-size: clamp(9px, 1.4vw, 13px);
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  color: var(--text-mid);
-  text-transform: uppercase;
-}
-
 /* ── HEALTH DISPLAY ── */
 .health-wrap {
   position: relative;
@@ -122,7 +112,7 @@ html, body {
 
 .health-number {
   font-family: var(--font-display);
-  font-size: clamp(96px, 18vw, 160px);
+  font-size: clamp(112px, 20vw, 180px);
   font-weight: 900;
   line-height: 1;
   color: var(--text-bright);
@@ -186,6 +176,7 @@ html, body {
 }
 
 .dmg-btn {
+  position: relative;
   width: var(--btn-size);
   height: var(--btn-size);
   border-radius: 8px;
@@ -193,7 +184,7 @@ html, body {
   background: rgba(0,170,255,0.06);
   color: var(--glow-blue);
   font-family: var(--font-display);
-  font-size: clamp(20px, 5vw, 32px);
+  font-size: 0;
   font-weight: 700;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
@@ -201,13 +192,31 @@ html, body {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
+.dmg-btn::before,
+.dmg-btn::after {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  background: currentColor;
+  border-radius: 1.5px;
+}
+.dmg-btn::before {
+  width: 38%; height: 3px;
+  transform: translate(-50%, -50%);
+}
+.dmg-btn.plus::after,
+.dmg-btn.heal-plus::after {
+  width: 3px; height: 38%;
+  transform: translate(-50%, -50%);
+}
 .dmg-btn:active { transform: scale(0.92); }
 .dmg-btn:hover {
   background: rgba(0,170,255,0.14);
   border-color: var(--glow-blue);
   box-shadow: 0 0 12px rgba(0,170,255,0.3);
 }
-.dmg-btn.minus:hover {
+.dmg-btn.minus:hover,
+.dmg-btn.plus:hover {
   background: rgba(255,102,51,0.1);
   border-color: var(--damage-orange);
   color: var(--damage-orange);
@@ -216,7 +225,7 @@ html, body {
 
 .dmg-display {
   font-family: var(--font-display);
-  font-size: clamp(28px, 5vw, 42px);
+  font-size: clamp(32px, 5.5vw, 48px);
   font-weight: 700;
   color: var(--damage-orange);
   min-width: clamp(36px, 7vw, 56px);
@@ -304,7 +313,7 @@ html, body {
 
 .heal-display {
   font-family: var(--font-display);
-  font-size: clamp(28px, 5vw, 42px);
+  font-size: clamp(32px, 5.5vw, 48px);
   font-weight: 700;
   color: var(--heal-green);
   min-width: clamp(36px, 7vw, 56px);
@@ -443,7 +452,7 @@ html, body {
 .action-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .undo-corner {
