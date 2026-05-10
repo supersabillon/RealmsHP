@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import AstroPWA from '@vite-pwa/astro';
 
+import cloudflare from "@astrojs/cloudflare";
+
 export default defineConfig({
   integrations: [
     AstroPWA({
@@ -34,4 +36,6 @@ export default defineConfig({
       },
     }),
   ],
+
+  adapter: cloudflare()
 });
