@@ -86,45 +86,147 @@ function ensureAudio() {
   if (audioCtx.state === 'suspended') void audioCtx.resume();
 }
 
-function playAttackSound() {
+function playAttackSound(damage: number) {
   ensureAudio();
   if (!audioCtx) return;
-  const t = audioCtx.currentTime;
+  const ctx = audioCtx;
+  const t = ctx.currentTime;
+  const heavy = damage >= 15;
 
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  const filter = audioCtx.createBiquadFilter();
+  const dur = heavy ? 0.34 : 0.2;
+  const startFreq = heavy ? 1000 : 1800;
+  const endFreq = heavy ? 60 : 180;
 
-  filter.type = 'bandpass';
-  filter.frequency.setValueAtTime(800, t);
-  filter.frequency.exponentialRampToValueAtTime(120, t + 0.3);
-  filter.Q.value = 2;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+
+  filter.type = 'highpass';
+  filter.frequency.value = heavy ? 70 : 220;
 
   osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(600, t);
-  osc.frequency.exponentialRampToValueAtTime(80, t + 0.3);
+  osc.frequency.setValueAtTime(startFreq, t);
+  osc.frequency.exponentialRampToValueAtTime(endFreq, t + dur);
 
-  gain.gain.setValueAtTime(0.3, t);
-  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+  const peak = heavy ? 0.42 : 0.28;
+  gain.gain.setValueAtTime(0.001, t);
+  gain.gain.exponentialRampToValueAtTime(peak, t + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + dur + 0.02);
 
   osc.connect(filter);
   filter.connect(gain);
-  gain.connect(audioCtx.destination);
-
+  gain.connect(ctx.destination);
   osc.start(t);
-  osc.stop(t + 0.35);
+  osc.stop(t + dur + 0.04);
 
-  const noise = audioCtx.createOscillator();
-  const ng = audioCtx.createGain();
-  noise.type = 'square';
-  noise.frequency.setValueAtTime(55, t + 0.05);
-  noise.frequency.exponentialRampToValueAtTime(30, t + 0.25);
-  ng.gain.setValueAtTime(0.2, t + 0.05);
-  ng.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-  noise.connect(ng);
-  ng.connect(audioCtx.destination);
-  noise.start(t + 0.05);
-  noise.stop(t + 0.3);
+  const mod = ctx.createOscillator();
+  const modGain = ctx.createGain();
+  mod.type = 'sine';
+  mod.frequency.setValueAtTime(heavy ? 28 : 55, t);
+  modGain.gain.value = heavy ? 380 : 220;
+  mod.connect(modGain);
+  modGain.connect(osc.frequency);
+  mod.start(t);
+  mod.stop(t + dur + 0.04);
+
+  if (heavy) {
+    const sub = ctx.createOscillator();
+    const subGain = ctx.createGain();
+    sub.type = 'sine';
+    sub.frequency.setValueAtTime(170, t);
+    sub.frequency.exponentialRampToValueAtTime(30, t + 0.45);
+    subGain.gain.setValueAtTime(0.001, t);
+    subGain.gain.exponentialRampToValueAtTime(0.75, t + 0.03);
+    subGain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    sub.connect(subGain);
+    subGain.connect(ctx.destination);
+    sub.start(t);
+    sub.stop(t + 0.55);
+
+    const thump = ctx.createOscillator();
+    const thumpGain = ctx.createGain();
+    thump.type = 'square';
+    thump.frequency.setValueAtTime(200, t);
+    thump.frequency.exponentialRampToValueAtTime(32, t + 0.08);
+    thumpGain.gain.setValueAtTime(0.42, t);
+    thumpGain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    thump.connect(thumpGain);
+    thumpGain.connect(ctx.destination);
+    thump.start(t);
+    thump.stop(t + 0.12);
+
+    const noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.3), ctx.sampleRate);
+    const data = noiseBuf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuf;
+    const noiseGain = ctx.createGain();
+    const noiseFilter = ctx.createBiquadFilter();
+    noiseFilter.type = 'lowpass';
+    noiseFilter.frequency.setValueAtTime(2200, t);
+    noiseFilter.frequency.exponentialRampToValueAtTime(180, t + 0.25);
+    noiseGain.gain.setValueAtTime(0.001, t);
+    noiseGain.gain.exponentialRampToValueAtTime(0.28, t + 0.005);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+    noise.start(t);
+    noise.stop(t + 0.3);
+  }
+}
+
+function playVictorySound() {
+  ensureAudio();
+  if (!audioCtx) return;
+  const ctx = audioCtx;
+  const start = ctx.currentTime + 0.3;
+
+  const arp = [523.25, 659.25, 783.99, 1046.5];
+  const step = 0.09;
+  arp.forEach((freq, i) => {
+    const noteAt = start + i * step;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, noteAt);
+    gain.gain.setValueAtTime(0.001, noteAt);
+    gain.gain.exponentialRampToValueAtTime(0.2, noteAt + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, noteAt + 0.16);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(noteAt);
+    osc.stop(noteAt + 0.18);
+  });
+
+  const chordAt = start + arp.length * step;
+  const chordDur = 0.8;
+  const chord = [523.25, 659.25, 783.99];
+  chord.forEach((freq) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, chordAt);
+    gain.gain.setValueAtTime(0.001, chordAt);
+    gain.gain.exponentialRampToValueAtTime(0.1, chordAt + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, chordAt + chordDur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(chordAt);
+    osc.stop(chordAt + chordDur + 0.05);
+  });
+
+  const shimmer = ctx.createOscillator();
+  const shimmerGain = ctx.createGain();
+  shimmer.type = 'sine';
+  shimmer.frequency.setValueAtTime(2093, chordAt);
+  shimmerGain.gain.setValueAtTime(0.001, chordAt);
+  shimmerGain.gain.exponentialRampToValueAtTime(0.04, chordAt + 0.1);
+  shimmerGain.gain.exponentialRampToValueAtTime(0.001, chordAt + chordDur);
+  shimmer.connect(shimmerGain);
+  shimmerGain.connect(ctx.destination);
+  shimmer.start(chordAt);
+  shimmer.stop(chordAt + chordDur + 0.05);
 }
 
 function playClickSound() {
@@ -327,13 +429,14 @@ function attack(attacker: 0 | 1) {
   addLog(attacker, `▶ Dealt ${dmg} damage to ${defName}`, 'damage-entry');
   addLog(target, `◀ Took ${dmg} damage from ${attName}`, 'damage-entry');
 
-  playAttackSound();
+  playAttackSound(dmg);
 
   if (state.hp[target] <= 0) {
     state.gameOver = true;
     state.winner = attacker;
     addLog(attacker, '★ AUTHORITY ELIMINATED — VICTORY', 'damage-entry');
     addLog(target, '✕ AUTHORITY AT ZERO — DEFEATED', 'damage-entry');
+    playVictorySound();
   }
 
   saveState();
